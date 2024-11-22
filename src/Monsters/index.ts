@@ -22,7 +22,6 @@ const getAreaMonsterBaseMetadataIds = async(area_id: number) => {
 }
 
 const getRandomAreaMonsterBaseMetadataId = async(area_id: number) => {
-    console.log(area_id);
     let areaMonsterBaseMetadataIds = await DB.executeQueryForResults<{ monster_base_metadata_id: number }>(`
         SELECT DISTINCT monster_base_metadata_id
         FROM area_monsters am
