@@ -22,7 +22,7 @@ const getAreaMonsterBaseMetadataIds = async(area_id: number) => {
 }
 
 const getRandomAreaMonsterBaseMetadataId = async(area_id: number) => {
-    
+    console.log(area_id);
     let areaMonsterBaseMetadataIds = await DB.executeQueryForResults<{ monster_base_metadata_id: number }>(`
         SELECT DISTINCT monster_base_metadata_id
         FROM area_monsters am
@@ -40,7 +40,26 @@ const getRandomAreaMonsterBaseMetadataId = async(area_id: number) => {
 }
 
 const getPlayerMonsters = async(address: string) => {
-    return [];
+    //only 4
+    let monsterIds = await DB.executeQueryForResults<{ monster_id: number }>(`
+        SELECT 
+            monster_id
+        FROM player_monsters pm
+        JOIN monsters m
+        ON m.id = pm.monster_id
+        JOIN users u
+        on u.id = pm.user_id
+        WHERE 
+            LOWER(u.address) = LOWER('${address}')
+            and equipped
+        LIMIT 4;
+    `);
+
+    if(!monsterIds) {
+        return undefined;
+    }
+
+    return monsterIds.map(x => x.monster_id);;
 }
 
 export { 

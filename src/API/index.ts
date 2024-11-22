@@ -241,6 +241,8 @@ export const getBattleResults = async(address: string) => {
                 on b.id = e.pve_battle_id
                 join monster_base_metadata mb
                 on mb.id = e.monster_base_metadata_id
+                join users u
+                on u.id = b.user_id
                 where lower(address) = lower('${address}')
                 and status = 1 -- battle ended
                 order by b.id desc

@@ -9,6 +9,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 import { routes as apiRoutes } from './src/Routes/api';
 import { routes as userRoutes } from './src/Routes/user';
+import { routes as gameRoutes } from './src/Routes/game';
 import { getServerPort, } from './utils';
 import { Battle } from './src/Battles';
 import { StartBattleParams } from './types';
@@ -65,6 +66,7 @@ app.use(async(req, res, next) => {
 
 app.use('/api', apiRoutes);
 app.use('/user', userRoutes);
+app.use('/game', gameRoutes);
 
 //connect app to websocket
 let http = createServer(app);

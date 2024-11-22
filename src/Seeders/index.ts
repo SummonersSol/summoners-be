@@ -460,6 +460,7 @@ export const seedPlayers = async(addresses: string[]) => {
     let query = getInsertQuery(columns, values, table);
     try {
         await DB.executeQuery(query);
+        await DB.executeQuery('insert into player_locations (user_id) select id from users');
         console.log(`Seeded ${table}`);
         return true;
     }
@@ -478,7 +479,7 @@ export const seedPlayerEquippedMonsters = async(addresses: string[]) => {
         console.log(`${table} already seeded! Skipping..`);
         return;
     }
-    let columns = ['user_id', 'monster_id'];
+    let columns = ['user_id', 'monster_id', 'equipped'];
     let values: any[][] = [];
 
     let monsterIds: number[] = [];
@@ -493,7 +494,7 @@ export const seedPlayerEquippedMonsters = async(addresses: string[]) => {
             } while(monsterIds.includes(monsterId));
 
             monsterIds.push(monsterId);
-            values.push([user?.id, monsterId]);
+            values.push([user?.id, monsterId, 'true']);
         }
     }
 

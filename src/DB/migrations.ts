@@ -134,7 +134,8 @@ export default [
             CREATE TABLE player_monsters (
                 id serial PRIMARY KEY,
                 user_id integer not null,
-                monster_id int not null
+                monster_id int not null,
+                equipped boolean not null default(false)
             );`,
         rollback_query: `DROP TABLE player_monsters;`
     },

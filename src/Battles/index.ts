@@ -4,6 +4,7 @@ import { getInsertQuery, getUTCDatetime } from "../../utils";
 import DB from "../DB";
 import { BossMonster, getPlayerMonsters, getRandomAreaMonsterBaseMetadataId, PlayerMonster, WildMonster } from "../Monsters";
 import { BattleConstructor, RoomEvent, SkillUsage } from "./types";
+import * as UserController from '../Controllers/UserController';
 
 const BATTLE_DELAY = 5; // 5 seconds delay for wild/boss battles
 
@@ -25,6 +26,7 @@ export class Battle {
     playerMonsterCount: number = 0;
     address: string;
     areaId: number = 0;
+    userId: number = 0;
     type: MonsterType;
 
     skillUsage: SkillUsage = {};
@@ -58,11 +60,27 @@ export class Battle {
             this.client.emit('invalid_battle', 'You have 0 guardians in party');
         }
 
+        let user = await UserController.findByAddress(this.address);
+        if(!user) {
+            return;
+        }
+        this.userId = user.id;
+        let area = await DB.executeQueryForSingleResult<{id: number}>(`
+            select player_locations.id from player_locations 
+            join users u on u.id = player_locations.user_id 
+            where lower(u.address) = lower('${this.address}')`)
+
+        if(!area) {
+            this.client.emit('invalid_battle', 'Unable to get area');
+            return;
+        }
+
+        this.areaId = area.id;
         try {
             await this._getEncounter();
         }
 
-        catch {
+        catch(e) {
             this.client.emit('invalid_battle', 'Unable to track monster');
         }
     
@@ -321,8 +339,8 @@ export class Battle {
      */
     _start = async() => {
         let now = getUTCDatetime();
-        let columns = ['address', 'status', 'time_start'];
-        let values: any[][] = [[this.address, STATUS_BATTLE_ONGOING, now]];
+        let columns = ['user_id', 'status', 'time_start'];
+        let values: any[][] = [[this.userId, STATUS_BATTLE_ONGOING, now]];
 
         let query = getInsertQuery(columns, values, 'pve_battles', true);
         let ret = await DB.executeQueryForSingleResult<{ id: number }>(query);
