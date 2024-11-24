@@ -18,11 +18,85 @@ export default [
                 name text not null,
                 address text unique not null,
                 profile_picture text null,
+                exp integer not null default(0),
                 created_at timestamp default(current_timestamp) not null,
                 last_connected_at timestamp default(current_timestamp) not null
             );`,
         rollback_query: `DROP TABLE users;`
     },
+
+    // courses
+    {
+        name: "create_courses_table",
+        query: `
+            CREATE TABLE courses (
+                id serial PRIMARY KEY,
+                name text not null,
+                exp integer not null default(0)
+            );`,
+        rollback_query: `DROP TABLE courses;`
+    },
+    {
+        name: "create_lessons_table",
+        query: `
+            CREATE TABLE lessons (
+                id serial PRIMARY KEY,
+                course_id integer not null,
+                name text not null
+            );`,
+        rollback_query: `DROP TABLE lessons;`
+    },
+    {
+        name: "create_lesson_pages_table",
+        query: `
+            CREATE TABLE lesson_pages (
+                id serial PRIMARY KEY,
+                lesson_id integer not null,
+                markdown text -- nullable for actions only pages
+            );`,
+        rollback_query: `DROP TABLE lesson_pages;`
+    },
+    {
+        // pivot table for user's last page for each lesson
+        name: "create_user_completed_lessons_table",
+        query: `
+            CREATE TABLE user_completed_lessons (
+                id serial PRIMARY KEY,
+                user_id integer not null,
+                lesson_id integer not null
+            );`,
+        rollback_query: `DROP TABLE user_completed_lessons;`
+    },
+    {
+        // pivot table for user's last page for each lesson
+        name: "create_user_last_pages_table",
+        query: `
+            CREATE TABLE user_last_pages (
+                id serial PRIMARY KEY,
+                user_id integer not null,
+                lesson_id integer not null,
+                lesson_page_id integer not null
+            );`,
+        rollback_query: `DROP TABLE user_last_pages;`
+    },
+    {
+        name: "create_actions_table",
+        query: `
+            CREATE TYPE action_type AS ENUM ('tx', 'cta', 'select', 'code');
+            CREATE TABLE actions (
+                id serial PRIMARY KEY,
+                lesson_page_id integer not null,
+                markdown text not null,
+                type action_type not null,
+                code text, -- for code mode
+                options json, -- for question select mode
+                tx_verify_url text, -- to confirm transactions
+                cta_url text -- for call to actions
+            );`,
+        rollback_query: `DROP TABLE actions;`
+    },
+
+    // game
     {
         name: "create_monster_base_metadata_table",
         query: `
@@ -273,5 +347,25 @@ export default [
         name: "add_created_at_to_player_monsters",
         query: `ALTER TABLE player_monsters ADD created_at timestamp default current_timestamp`,
         rollback_query: `ALTER TABLE player_monsters DROP COLUMN created_at;`
+    },
+
+
+    // for better logging
+    {
+        name: "create_logs_table",
+        query: `
+            CREATE TABLE logs (
+                id serial PRIMARY KEY,
+                created_at timestamp default current_timestamp not null,
+                file text not null,
+                function text not null,
+                log text not null
+            );
+            CREATE INDEX logs_created_at_idx ON logs(created_at);
+        `,
+        rollback_query: `
+            DROP INDEX logs_created_at_idx;
+            DROP TABLE logs;
+        `,
     },
 ]
