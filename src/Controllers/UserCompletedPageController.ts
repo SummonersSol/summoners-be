@@ -1,12 +1,10 @@
 import { formatDBParamsToStr, } from "../../utils";
 import DB from "../DB"
 import _ from "lodash";
-import { fillableColumns, Course, ProcessedCourse, CourseWithLessons } from "../Models/Course";
-import { getCourseCompletionsByAddress } from "./UserController";
-import * as LessonController from './LessonController';
-const table = 'courses';
+import { fillableColumns, UserCompletedPage } from "../Models/UserCompletedPage";
+const table = 'user_completed_pages';
 
-// init entry for Course
+// init entry for UserCompletedPage
 export const init = async() => { }
 
 // create
@@ -24,21 +22,16 @@ export const create = async(insertParams: any) => {
 }
 
 // view (single - id)
-export const view = async(id: number, user_id: number) => {
+export const view = async(id: number) => {
     const query = `SELECT ${fillableColumns.join(",")} FROM ${table} WHERE id = ${id} LIMIT 1`;
 
-    const result = await DB.executeQueryForSingleResult<Course>(query);
+    const result = await DB.executeQueryForSingleResult<UserCompletedPage>(query);
 
     if(!result) {
       return undefined;
     }
 
-    let p: CourseWithLessons = {
-        ...result,
-        lessons: await LessonController.find(user_id, { course_id: result.id }),
-    }
-
-    return p;
+    return result;
 }
 
 // find (all match)
@@ -46,32 +39,31 @@ export const find = async(whereParams: {[key: string]: any}) => {
     const params = formatDBParamsToStr(whereParams, { separator: ' AND ', isSearch: true });
     const query = `SELECT * FROM ${table} WHERE ${params}`;
 
-    const result = await DB.executeQueryForResults<Course>(query);
+    const result = await DB.executeQueryForResults<UserCompletedPage>(query);
 
     return result;
 }
 
+export const getLastPage = async(user_id: number, lesson_id: number) => {
+    const query = `SELECT lesson_page_id FROM ${table} WHERE user_id = ${user_id} and lesson_id = ${lesson_id} order by id desc limit 1`;
+    const result = await DB.executeQueryForSingleResult<{lesson_page_id: number}>(query);
+    return result?.lesson_page_id ?? 0;
+}
+
+export const getCompletedPages = async(user_id: number, lesson_id: number) => {
+    const query = `SELECT count(*)::int as completed_pages FROM ${table} WHERE user_id = ${user_id} and lesson_id = ${lesson_id}`;
+    const result = await DB.executeQueryForSingleResult<{completed_pages: number}>(query);
+    return result?.completed_pages ?? 0;
+}
+
+
 // list (all)
-export const list = async(address: string) => {
-    const query = `SELECT * FROM ${table} ORDER BY id asc`;
+export const list = async() => {
+    const query = `SELECT * FROM ${table} ORDER BY id desc`;
 
-    const results = await DB.executeQueryForResults<Course>(query);
-    if(!results) {
-        return [];
-    }
+    const result = await DB.executeQueryForResults<UserCompletedPage>(query);
 
-    let processed: ProcessedCourse[] = [];
-    let courseCompletions = await getCourseCompletionsByAddress(address);
-    for(const result of results) {
-        let courseCompletion = courseCompletions.filter(x => x.id === result.id)[0];
-        let p: ProcessedCourse = {
-            ...result,
-            total_pages: courseCompletion.total_pages,
-            completed_pages: courseCompletion.completed_pages,
-        }
-        processed.push(p);
-    }
-    return processed;
+    return result ?? [];
 }
 
 // update

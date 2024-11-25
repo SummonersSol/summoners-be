@@ -1,7 +1,9 @@
 import { formatDBParamsToStr, } from "../../utils";
 import DB from "../DB"
 import _ from "lodash";
-import { fillableColumns, Lesson, ProcessedLesson } from "../Models/Lesson";
+import { fillableColumns, Lesson, LessonWithPages, ProcessedLesson } from "../Models/Lesson";
+import * as LessonPageController from './LessonPageController';
+import * as UserCompletedPageController from './UserCompletedPageController';
 const table = 'lessons';
 
 // init entry for Lesson
@@ -22,7 +24,7 @@ export const create = async(insertParams: any) => {
 }
 
 // view (single - id)
-export const view = async(id: number) => {
+export const view = async(id: number, user_id: number) => {
     const query = `SELECT ${fillableColumns.join(",")} FROM ${table} WHERE id = ${id} LIMIT 1`;
 
     const result = await DB.executeQueryForSingleResult<Lesson>(query);
@@ -31,11 +33,23 @@ export const view = async(id: number) => {
       return undefined;
     }
 
+    let p: LessonWithPages = {
+        ...result,
+        pages: await LessonPageController.find({ lesson_id: result.id }),
+        last_completed_page: await UserCompletedPageController.getLastPage(user_id, result.id),
+    }
+
+    return p;
+}
+export const simpleView = async(id: number) => {
+    const query = `SELECT ${fillableColumns.join(",")} FROM ${table} WHERE id = ${id} LIMIT 1`;
+
+    const result = await DB.executeQueryForSingleResult<Lesson>(query);
     return result;
 }
 
 // find (all match)
-export const find = async(whereParams: {[key: string]: any}) => {
+export const find = async(user_id: number, whereParams: {[key: string]: any}) => {
     const params = formatDBParamsToStr(whereParams, { separator: ' AND ', isSearch: true });
     const query = `SELECT * FROM ${table} WHERE ${params}`;
 
@@ -45,6 +59,14 @@ export const find = async(whereParams: {[key: string]: any}) => {
     }
 
     let processed: ProcessedLesson[] = [];
+    for(const result of results) {
+        let p: ProcessedLesson = {
+            ...result,
+            total_pages: await LessonPageController.getLessonTotalPages(result.id),
+            completed_pages: await UserCompletedPageController.getCompletedPages(user_id, result.id),
+        }
+        processed.push(p);
+    }
     return processed;
 }
 

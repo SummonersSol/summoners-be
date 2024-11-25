@@ -1,10 +1,11 @@
-import { formatDBParamsToStr, getUpsertQuery, } from "../../utils";
+import { formatDBParamsToStr, getInsertQuery, getRandomNumber, getUpsertQuery, } from "../../utils";
 import DB from "../DB"
 import _ from "lodash";
 import { fillableColumns, User } from "../Models/User";
 import { CourseCompletion } from "../Models/Course";
 import * as LessonController from './LessonController';
 import * as UserCompletedLessonController from './UserCompletedLessonController';
+import * as UserCompletedPageController from './UserCompletedPageController';
 const table = 'users';
 
 // init entry for user
@@ -103,33 +104,50 @@ export const completeLessonByAddress = async(address: string, lesson_id: number)
         return;
     }
 
-    const lesson = await LessonController.view(lesson_id);
+    const lesson = await LessonController.simpleView(lesson_id);
     if(!lesson) {
         return;
     }
 
     await UserCompletedLessonController.create({ user_id: user.id, lesson_id, exp: lesson.exp });
+    const updateQuery = `UPDATE users SET exp = exp + ${lesson.exp} WHERE id = ${user.id}`;
+    await DB.executeQuery(updateQuery);
 
-    return;
+    // add monster
+    let columns = ['user_id', 'monster_id', 'equipped'];
+    let values: any[][] = [];
+
+    let monsterId = getRandomNumber(1, 100, true);
+    values.push([user.id, monsterId, 'false']);
+
+    let query = getInsertQuery(columns, values, 'player_monsters');
+    try {
+        await DB.executeQuery(query);
+        return true;
+    }
+
+    catch {
+        return false;
+    }
 }
 
-export const setLastPageByAddress = async(address: string, lesson_id: number, lesson_page_id: number) => {
+export const completePageByAddress = async(address: string, lesson_id: number, lesson_page_id: number) => {
     let user = await findByAddress(address);
     if(!user) {
         return;
     }
 
-    const query = getUpsertQuery(
-        'user_last_pages', 
-        { lesson_page_id, lesson_id, user_id: user.id }, 
-        { lesson_page_id, lesson_id, user_id: user.id },
-        { lesson_id, user_id: user.id }
-    );
+    let completedPage = await UserCompletedPageController.find({user_id: user.id, lesson_id, lesson_page_id});
+    if(completedPage && completedPage.length > 0) {
+        // already completed
+        return;
+    }
 
-    return await DB.executeQuery(query);
+    await UserCompletedPageController.create({ lesson_page_id, lesson_id, user_id: user.id });
+    return;
 }
 
-export const getLastPagesByAddress = async(address: string, course_id: number) => {
+export const getLessonCompletionsByAddress = async(address: string, lesson_id: number) => {
     let user = await findByAddress(address);
     if(!user) {
         return [];
@@ -138,31 +156,29 @@ export const getLastPagesByAddress = async(address: string, course_id: number) =
     const query = `
         with user_pages as (
             select
-                l.id,
+                c.id as course_id,
                 count(*) as completed_pages
-            from courses c
-            join lesson l on l.course_id = c.id
+            from lessons l
             join user_completed_pages p on p.lesson_id = l.id
             where p.user_id = ${user.id}
-              and c.id = ${course_id}
+              and l.id = ${lesson_id}
         )
         select
             l.id,
             count(*) as total_pages,
             u.completed_pages
-        from courses c
-        join lesson l on l.course_id = c.id
+        from lessons l
         join lesson_pages p on p.lesson_id = l.id
         left join user_pages u on u.course_id = c.id
         group by l.id
         where u.id = ${user.id}
-          and c.id = ${course_id}
+          and l.id = ${lesson_id}
     `;
 
     return (await DB.executeQueryForResults<CourseCompletion>(query)) ?? [];
 }
 
-export const getLessonCompletionsByAddress = async(address: string) => {
+export const getCourseCompletionsByAddress = async(address: string) => {
     let user = await findByAddress(address);
     if(!user) {
         return [];
@@ -171,42 +187,25 @@ export const getLessonCompletionsByAddress = async(address: string) => {
     const query = `
         with user_pages as (
             select
-                c.id,
-                count(*) as completed_pages
+                c.id as course_id,
+                count(*)::int as completed_pages
             from courses c
-            join lesson l on l.course_id = c.id
+            join lessons l on l.course_id = c.id
             join lesson_pages p on p.lesson_id = l.id
             join user_completed_pages cp on cp.lesson_page_id = p.id
+            where cp.user_id = ${user.id}
             group by c.id
-            where p.user_id = ${user.id}
         )
         select
             c.id,
-            count(*) as total_pages,
+            count(*)::int as total_pages,
             coalesce(u.completed_pages, 0) as completed_pages
         from courses c
-        join lesson l on l.course_id = c.id
+        join lessons l on l.course_id = c.id
         join lesson_pages p on p.lesson_id = l.id
         left join user_pages u on u.course_id = c.id
-        group by c.id
-        where u.id = ${user.id}
+        group by c.id, u.completed_pages
     `;
 
     return (await DB.executeQueryForResults<CourseCompletion>(query)) ?? [];
-}
-
-export const setLessonPageCompleteByAddress =async (address: string, lesson_page_id: number) => {
-    let user = await findByAddress(address);
-    if(!user) {
-        return;
-    }
-
-    const query = getUpsertQuery(
-        'user_completed_pages', 
-        { lesson_page_id, user_id: user.id }, 
-        { lesson_page_id, user_id: user.id },
-        { lesson_page_id, user_id: user.id }
-    );
-
-    return await DB.executeQuery(query);
 }

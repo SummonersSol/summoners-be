@@ -592,65 +592,37 @@ Testnet is similar to Devnet, but focuses on network performance and stability, 
 
 Localnet is also similar to Devnet, but the network is hosted locally, it is oriented to be used by projects that are in its earliest stages.
 
-<small>[Read More](https://help.solflare.com/en/articles/6328814-differences-between-mainnet-devnet-and-testnet-and-how-to-switch-between-on-solflare)</small>
+<small><a href="https://help.solflare.com/en/articles/6328814-differences-between-mainnet-devnet-and-testnet-and-how-to-switch-between-on-solflare" target="_blank">Read More</a></small>
 
 Now that we know the differences, how do we communicate these networks? Let's find out!`]);
 
     values.push([1, `# Chapter 2: RPCs
 
-In order to communicate with the networks, first we must set up RPCs. There are a few free Solana RPCs that you can sign up to, for example [Helius](https://www.helius.dev/), [QuickNode](https://www.quicknode.com/), and [HelloMoon](https://www.hellomoon.io/).
+In order to communicate with the networks, first we must set up RPCs. There are a few free Solana RPCs that you can sign up to, for example <a href="https://www.helius.dev/" target="_blank">Helius</a>, <a href="https://www.quicknode.com/" target="_blank">QuickNode</a>, and <a href="https://www.hellomoon.io/" target="_blank">HelloMoon</a>.
 
 In this lesson, we're going to set up a Helius RPC.
 
-1. First, go to the [developer login page](https://dashboard.helius.dev).
+1. First, go to the <a href="https://dashboard.helius.dev" target="_blank">developer login page</a>.
 
-![image](./assets/courses/basics/helius_1.png)
-
-2. Sign up using any of the options. In this example, we will be signing up using a Solana Wallet.
-
-![image](./assets/courses/basics/helius_2.png)
-
-![image](./assets/courses/basics/helius_3.png)
-
-3. Choose the Free Plan and you're set!
-
-![image](./assets/courses/basics/helius_4.png)
-
-4. To get the API key for your project, go to the Endpoints tab on the left, and switch it to Devnet.
-
-![image](./assets/courses/basics/helius_5.png)
-
-![image](./assets/courses/basics/helius_6.png)
-
-![image](./assets/courses/basics/helius_7.png)
-
-Easy, isn't it? Next, we'll learn how to point our wallet to Solana's Testnet.`]);values.push([1, `# Chapter 2: RPCs
-
-In order to communicate with the networks, first we must set up RPCs. There are a few free Solana RPCs that you can sign up to, for example [Helius](https://www.helius.dev/), [QuickNode](https://www.quicknode.com/), and [HelloMoon](https://www.hellomoon.io/).
-
-In this lesson, we're going to set up a Helius RPC.
-
-1. First, go to the [developer login page](https://dashboard.helius.dev).
-
-![image](./assets/courses/basics/helius_1.png)
+![image](/assets/courses/basics/helius_1.png)
 
 2. Sign up using any of the options. In this example, we will be signing up using a Solana Wallet.
 
-![image](./assets/courses/basics/helius_2.png)
+![image](/assets/courses/basics/helius_2.png)
 
-![image](./assets/courses/basics/helius_3.png)
+![image](/assets/courses/basics/helius_3.png)
 
 3. Choose the Free Plan and you're set!
 
-![image](./assets/courses/basics/helius_4.png)
+![image](/assets/courses/basics/helius_4.png)
 
 4. To get the API key for your project, go to the Endpoints tab on the left, and switch it to Devnet.
 
-![image](./assets/courses/basics/helius_5.png)
+![image](/assets/courses/basics/helius_5.png)
 
-![image](./assets/courses/basics/helius_6.png)
+![image](/assets/courses/basics/helius_6.png)
 
-![image](./assets/courses/basics/helius_7.png)
+![image](/assets/courses/basics/helius_7.png)
 
 Easy, isn't it? Next, we'll learn how to point our wallet to Solana's Testnet.`]);
 
@@ -660,23 +632,23 @@ In this chapter, we will set up Phantom's testnet mode.
 
 1. Click the circle at the top right corner, right next to your wallet's name.
 
-![image](./assets/courses/basics/phantom_1.png)
+![image](/assets/courses/basics/phantom_1.png)
 
 2. Go to settings.
 
-![image](./assets/courses/basics/phantom_2.png)
+![image](/assets/courses/basics/phantom_2.png)
 
 3. Scroll to the bottom, select Developer Settings.
 
-![image](./assets/courses/basics/phantom_3.png)
+![image](/assets/courses/basics/phantom_3.png)
 
 4. Click on Testnet Mode and select Solana.
 
-![image](./assets/courses/basics/phantom_4.png)
+![image](/assets/courses/basics/phantom_4.png)
 
 5. Select Solana Devnet and you're done!
 
-![image](./assets/courses/basics/phantom_5.png)
+![image](/assets/courses/basics/phantom_5.png)
 
 Next, let's find out how to set it up on Backpack.`]);
 
@@ -686,25 +658,25 @@ In this chapter, we will set up Backpack's testnet mode.
 
 1. Click the circle at the top right corner, right next to your wallet's name.
 
-![image](./assets/courses/basics/backpack_1.png)
+![image](/assets/courses/basics/backpack_1.png)
 
 2. Click on Settings.
 
 3. Click on Solana.
 
-![image](./assets/courses/basics/backpack_2.png)
+![image](/assets/courses/basics/backpack_2.png)
 
 4. Select RPC Connection.
 
-![image](./assets/courses/basics/backpack_3.png)
+![image](/assets/courses/basics/backpack_3.png)
 
 5. Select Custom.
 
-![image](./assets/courses/basics/backpack_4.png)
+![image](/assets/courses/basics/backpack_4.png)
 
 6. Paste the devnet RPC url from Helius.
 
-![image](./assets/courses/basics/backpack_5.png)
+![image](/assets/courses/basics/backpack_5.png)
 
 7. Update and you're done!`]);
 
@@ -716,13 +688,13 @@ To acquire SOLs on testnet (they have no value), you will need to request an air
 
 For starters, I'll demonstrate on how to request an airdrop from a faucet.
 
-1. First, go to this [site](https://solfaucet.com/).
+1. First, go to this <a href="https://solfaucet.com/" target="_blank">site</a>.
 
-![image](./assets/courses/basics/solfaucet_1.png)
+![image](/assets/courses/basics/solfaucet_1.png)
 
 2. Paste your wallet address.
 
-![image](./assets/courses/basics/solfaucet_2.png)
+![image](/assets/courses/basics/solfaucet_2.png)
 
 3. Airdrop SOLs to Devnet, and you're done!
 
@@ -740,19 +712,19 @@ Similar to wallets, we will need to point the explorers to testnet if we want to
 
 1. Click on the Solana icon on the top right corner and select Solscan RPC - Devnet.
 
-![image](./assets/courses/basics/solscan_1.png)
+![image](/assets/courses/basics/solscan_1.png)
 
 - Solana FM
 
 1. Turn on Developer Mode using the bar at the bottom.
 
-![image](./assets/courses/basics/solanafm_1.png)
+![image](/assets/courses/basics/solanafm_1.png)
 
 2. Click on the Settings button on the bottom bar.
 
 3. In Preferred RPC, select devnet-solana.
 
-![image](./assets/courses/basics/solanafm_2.png)`]);
+![image](/assets/courses/basics/solanafm_2.png)`]);
 
     values.push([1, `# Chapter 7: Finalizing
 
@@ -764,29 +736,29 @@ We are using Phantom for this example.
 
 1. Open up Phantom, if you haven't requested for an airdrop, please request from the faucet (Chapter 5).
 
-![image](./assets/courses/basics/send_1.png)
+![image](/assets/courses/basics/send_1.png)
 
 2. Make sure it's in Testnet mode!!!
 
 3. Click on Solana.
 
-![image](./assets/courses/basics/send_2.png)
+![image](/assets/courses/basics/send_2.png)
 
 4. Click on Send.
 
-![image](./assets/courses/basics/send_3.png)
+![image](/assets/courses/basics/send_3.png)
 
 5. Paste the address and follow the steps.
 
-![image](./assets/courses/basics/send_4.png)
+![image](/assets/courses/basics/send_4.png)
 
 6. Once again, make sure it shows that the network is Solana Devnet (Backpack doesn't show this, but it will show that a custom RPC is being used).
 
-![image](./assets/courses/basics/send_5.png)
+![image](/assets/courses/basics/send_5.png)
 
 7. Click on the View Transaction to view the transaction details.
 
-![image](./assets/courses/basics/send_6.png)
+![image](/assets/courses/basics/send_6.png)
 
 Congratulations! You've made it to the end, now let's move on to the next courses shall we?`]);
 
@@ -822,8 +794,8 @@ export const seedActions = async() => {
     let columns = ['lesson_page_id', 'markdown', 'type', 'code', 'options', 'tx_verify_url', 'cta_url'];
     let values: any[][] = [];
 
-    values.push([1, 'How many types of developer networks are there?', 'select', null, '{"options": ["1","2","3"], "answer": 3}', null, null]);
-    values.push([7, 'Enter the tx hash to complete the lesson!', 'tx', null, null, 'http://localhost:3000/course/verifyFirstTestnetTx', null]);
+    values.push([1, 'How many types of developer networks are there?', 'select', null, '{"options": ["1","2","3"], "answer": 2}', null, null]);
+    values.push([7, 'Enter the tx hash to complete the lesson!', 'tx', null, null, 'http://localhost:8081/courses/verifyFirstTestnetTx', null]);
 
     let query = getInsertQuery(columns, values, table);
     try {

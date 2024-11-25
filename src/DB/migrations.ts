@@ -76,6 +76,7 @@ export default [
             CREATE TABLE user_completed_pages (
                 id serial PRIMARY KEY,
                 user_id integer not null,
+                lesson_id integer not null,
                 lesson_page_id integer not null
             );`,
         rollback_query: `DROP TABLE user_completed_pages;`

@@ -3,6 +3,7 @@ import DB from "../DB"
 import _ from "lodash";
 import { fillableColumns, LessonPage, ProcessedLessonPage } from "../Models/LessonPage";
 import * as ActionController from './ActionController';
+import * as UserCompletedPageController from './UserCompletedPageController';
 const table = 'lesson_pages';
 
 // init entry for LessonPage
@@ -49,11 +50,16 @@ export const find = async(whereParams: {[key: string]: any}) => {
     for(const result of results) {
         let p: ProcessedLessonPage = {
             ...result,
-            actions: await ActionController.find({ lesson_id: result.id }) ?? [],
+            actions: await ActionController.find({ lesson_page_id: result.id }) ?? [],
         }
         processed.push(p);
     }
     return processed;
+}
+export const getLessonTotalPages = async(lesson_id: number) => {
+    const query = `SELECT count(*)::int as total_pages FROM ${table} WHERE lesson_id = ${lesson_id}`;
+    const result = await DB.executeQueryForSingleResult<{total_pages: number}>(query);
+    return result?.total_pages ?? 0;
 }
 
 // list (all)

@@ -4,15 +4,12 @@ export type Action = {
     markdown: string;
     type: ActionType; 
     code?: string;
-    options?: string;
-    tx_verify_url?: string;
-    cta_url?: string;
-}
-export type ProcessedAction = Action & {
-    optionsArray?: {
+    options?: {
         options: string[];
         answer: number; // index
     };
+    tx_verify_url?: string;
+    cta_url?: string;
 }
 
 export type ActionType = 'tx' | 'cta' | 'select' | 'code';

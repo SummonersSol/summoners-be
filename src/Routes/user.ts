@@ -21,13 +21,15 @@ routes.post('/', async(req, res) => {
     
     let result = await UserController.create({
         address: data.address,
-        // name: data.name,
+        name: data.address,
     });
 
     if(!result) {
         return res.status(500).send("Server Error");
     }
 
+    // insert player location
+    await DB.executeQuery(`insert into player_locations (user_id) values (${result.id})`);
     let users = await UserController.find({ id: result.id });
 
     if(!users || users.length === 0) {
