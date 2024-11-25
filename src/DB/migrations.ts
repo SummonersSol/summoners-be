@@ -32,6 +32,7 @@ export default [
             CREATE TABLE courses (
                 id serial PRIMARY KEY,
                 name text not null,
+                description text not null,
                 exp integer not null default(0)
             );`,
         rollback_query: `DROP TABLE courses;`
@@ -42,7 +43,8 @@ export default [
             CREATE TABLE lessons (
                 id serial PRIMARY KEY,
                 course_id integer not null,
-                name text not null
+                name text not null,
+                exp integer not null default(0)
             );`,
         rollback_query: `DROP TABLE lessons;`
     },
@@ -63,21 +65,21 @@ export default [
             CREATE TABLE user_completed_lessons (
                 id serial PRIMARY KEY,
                 user_id integer not null,
-                lesson_id integer not null
+                lesson_id integer not null,
+                exp integer not null default(0)
             );`,
         rollback_query: `DROP TABLE user_completed_lessons;`
     },
     {
         // pivot table for user's last page for each lesson
-        name: "create_user_last_pages_table",
+        name: "create_user_completed_pages_table",
         query: `
-            CREATE TABLE user_last_pages (
+            CREATE TABLE user_completed_pages (
                 id serial PRIMARY KEY,
                 user_id integer not null,
-                lesson_id integer not null,
                 lesson_page_id integer not null
             );`,
-        rollback_query: `DROP TABLE user_last_pages;`
+        rollback_query: `DROP TABLE user_completed_pages;`
     },
     {
         name: "create_actions_table",
