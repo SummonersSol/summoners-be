@@ -8,6 +8,12 @@ export type Action = {
     tx_verify_url?: string;
     cta_url?: string;
 }
+export type ProcessedAction = Action & {
+    optionsArray?: {
+        options: string[];
+        answer: number; // index
+    };
+}
 
 export type ActionType = 'tx' | 'cta' | 'select' | 'code';
 

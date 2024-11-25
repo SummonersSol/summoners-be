@@ -1,7 +1,7 @@
 import { formatDBParamsToStr, } from "../../utils";
 import DB from "../DB"
 import _ from "lodash";
-import { fillableColumns, Action } from "../Models/Action";
+import { fillableColumns, Action, ProcessedAction } from "../Models/Action";
 const table = 'actions';
 
 // init entry for Action
@@ -31,7 +31,12 @@ export const view = async(id: number) => {
       return undefined;
     }
 
-    return result;
+    let processed: ProcessedAction[] = [];
+    let p: ProcessedAction = {
+        ...result,
+        optionsArray: result.options? JSON.parse(result.options) : undefined,
+    }
+    return p;
 }
 
 // find (all match)
@@ -39,18 +44,38 @@ export const find = async(whereParams: {[key: string]: any}) => {
     const params = formatDBParamsToStr(whereParams, { separator: ' AND ', isSearch: true });
     const query = `SELECT * FROM ${table} WHERE ${params}`;
 
-    const result = await DB.executeQueryForResults<Action>(query);
+    const results = await DB.executeQueryForResults<Action>(query);
+    if(!results) {
+        return;
+    }
 
-    return result;
+    let processed: ProcessedAction[] = [];
+    for(const result of results) {
+        let p: ProcessedAction = {
+            ...result,
+            optionsArray: result.options? JSON.parse(result.options) : undefined,
+        }
+    }
+    return processed;
 }
 
 // list (all)
 export const list = async() => {
     const query = `SELECT * FROM ${table} ORDER BY id desc`;
 
-    const result = await DB.executeQueryForResults<Action>(query);
+    const results = await DB.executeQueryForResults<Action>(query);
+    if(!results) {
+        return [];
+    }
 
-    return result ?? [];
+    let processed: ProcessedAction[] = [];
+    for(const result of results) {
+        let p: ProcessedAction = {
+            ...result,
+            optionsArray: result.options? JSON.parse(result.options) : undefined,
+        }
+    }
+    return processed;
 }
 
 // update

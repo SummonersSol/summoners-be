@@ -1,4 +1,4 @@
-import { Action } from "./Action";
+import { Action, ProcessedAction } from "./Action";
 
 export type LessonPage = {
     id: number;
@@ -7,7 +7,7 @@ export type LessonPage = {
 }
 
 export type ProcessedLessonPage = LessonPage & {
-    actions: Action[];
+    actions: ProcessedAction[];
 }
 
 export const fillableColumns = [

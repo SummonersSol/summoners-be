@@ -2,7 +2,6 @@ export type Course = {
     id: number;
     name: string;
     description: string;
-    exp: number;
 }
 
 export type ProcessedCourse = Course & {
@@ -20,5 +19,4 @@ export const fillableColumns = [
     'id',
     'name',
     'description',
-    'exp',
 ];

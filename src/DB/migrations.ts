@@ -32,8 +32,7 @@ export default [
             CREATE TABLE courses (
                 id serial PRIMARY KEY,
                 name text not null,
-                description text not null,
-                exp integer not null default(0)
+                description text not null
             );`,
         rollback_query: `DROP TABLE courses;`
     },

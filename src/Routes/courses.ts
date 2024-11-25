@@ -13,7 +13,10 @@ routes.post('/', async(req, res) => {
     let { address } = req.body;
     let courses = await CourseController.list(address);
     let courseComletions = await UserController.getLessonCompletionsByAddress(address);
-    return res.send(courses);
+    return res.send({
+        courses,
+        courseComletions,
+    });
 });
 
 routes.post('/lastPage', async(req, res) => {

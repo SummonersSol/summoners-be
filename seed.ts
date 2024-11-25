@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'path';
 import prompt from 'prompt-sync';
-import { seedAreaMonsters, seedAreas, seedEffects, seedElementMultiplier, seedElements, seedMonsterMetadata, seedMonsterEquippedSkills, seedMonsters, seedMonsterSkills, seedPlayerEquippedMonsters, seedPlayers } from './src/Seeders';
+import { seedAreaMonsters, seedAreas, seedEffects, seedElementMultiplier, seedElements, seedMonsterMetadata, seedMonsterEquippedSkills, seedMonsters, seedMonsterSkills, seedPlayerEquippedMonsters, seedPlayers, seedCourses, seedLessons, seedLessonPages, seedActions } from './src/Seeders';
 import { isProduction } from './utils';
 
 dotenv.config({ path: path.join(__dirname, '.env')});
@@ -16,6 +16,10 @@ dotenv.config({ path: path.join(__dirname, '.env')});
         await seedAreaMonsters();
         await seedElements();
         await seedElementMultiplier();
+        await seedCourses();
+        await seedLessons();
+        await seedLessonPages();
+        await seedActions();
     
         //only seed these if in testnet
         if(!isProduction()){

@@ -509,3 +509,330 @@ export const seedPlayerEquippedMonsters = async(addresses: string[]) => {
         return false;
     }
 }
+
+export const seedCourses = async() => {
+    let table = 'courses';
+    let checkerQuery = `SELECT COUNT(*) as count FROM ${table}`;
+    let checkerRes = await DB.executeQueryForResults<{count: number}>(checkerQuery);
+
+    if(checkerRes && checkerRes[0].count > 0) {
+        console.log(`${table} already seeded! Skipping..`);
+        return;
+    }
+    let columns = ['name', 'description'];
+    let values: any[][] = [];
+
+    values.push(['Introduction', 'In this course, you will learn all the basic Solana developer tools and essentials.']);
+
+    let query = getInsertQuery(columns, values, table);
+    try {
+        await DB.executeQuery(query);
+        console.log(`Seeded ${table}`);
+        return true;
+    }
+
+    catch {
+        return false;
+    }
+}
+
+export const seedLessons = async() => {
+    let table = 'lessons';
+    let checkerQuery = `SELECT COUNT(*) as count FROM ${table}`;
+    let checkerRes = await DB.executeQueryForResults<{count: number}>(checkerQuery);
+
+    if(checkerRes && checkerRes[0].count > 0) {
+        console.log(`${table} already seeded! Skipping..`);
+        return;
+    }
+    let columns = ['name', 'course_id', 'exp'];
+    let values: any[][] = [];
+
+    values.push(['Introduction', 1, 100]);
+
+    let query = getInsertQuery(columns, values, table);
+    try {
+        await DB.executeQuery(query);
+        console.log(`Seeded ${table}`);
+        return true;
+    }
+
+    catch {
+        return false;
+    }
+}
+
+export const seedLessonPages = async() => {
+    let table = 'lesson_pages';
+    let checkerQuery = `SELECT COUNT(*) as count FROM ${table}`;
+    let checkerRes = await DB.executeQueryForResults<{count: number}>(checkerQuery);
+
+    if(checkerRes && checkerRes[0].count > 0) {
+        console.log(`${table} already seeded! Skipping..`);
+        return;
+    }
+    let columns = ['lesson_id', 'markdown'];
+    let values: any[][] = [];
+
+    values.push([1, `# Chapter 1: Developer Networks
+
+In Solana, there are three types of developer networks, namely testnet, devnet, and localnet. These networks serve a similar purpose - which is to allow developers to deploy their smart contracts and interact with them as a way to test their behavior before it's deployed to the mainnet, we don't want to have a buggy user experience now do we?
+
+Although their main function is essentially the same, these networks are used by different groups of developers, where:
+
+- Devnet
+
+Devnet is where you can access all functions on the main net for testing and development purposes without actually interacting or risking real assets on the mainnet. **Tokens on Devnet are not real assets and cannot be transferred over to mainnet in any way.**
+
+- Testnet
+
+Testnet is similar to Devnet, but focuses on network performance and stability, it is oriented to be used by validators. **Tokens on Testnet are not real assets and cannot be transferred over to mainnet in any way.**
+
+- Localnet
+
+Localnet is also similar to Devnet, but the network is hosted locally, it is oriented to be used by projects that are in its earliest stages.
+
+<small>[Read More](https://help.solflare.com/en/articles/6328814-differences-between-mainnet-devnet-and-testnet-and-how-to-switch-between-on-solflare)</small>
+
+Now that we know the differences, how do we communicate these networks? Let's find out!`]);
+
+    values.push([1, `# Chapter 2: RPCs
+
+In order to communicate with the networks, first we must set up RPCs. There are a few free Solana RPCs that you can sign up to, for example [Helius](https://www.helius.dev/), [QuickNode](https://www.quicknode.com/), and [HelloMoon](https://www.hellomoon.io/).
+
+In this lesson, we're going to set up a Helius RPC.
+
+1. First, go to the [developer login page](https://dashboard.helius.dev).
+
+![image](./assets/courses/basics/helius_1.png)
+
+2. Sign up using any of the options. In this example, we will be signing up using a Solana Wallet.
+
+![image](./assets/courses/basics/helius_2.png)
+
+![image](./assets/courses/basics/helius_3.png)
+
+3. Choose the Free Plan and you're set!
+
+![image](./assets/courses/basics/helius_4.png)
+
+4. To get the API key for your project, go to the Endpoints tab on the left, and switch it to Devnet.
+
+![image](./assets/courses/basics/helius_5.png)
+
+![image](./assets/courses/basics/helius_6.png)
+
+![image](./assets/courses/basics/helius_7.png)
+
+Easy, isn't it? Next, we'll learn how to point our wallet to Solana's Testnet.`]);values.push([1, `# Chapter 2: RPCs
+
+In order to communicate with the networks, first we must set up RPCs. There are a few free Solana RPCs that you can sign up to, for example [Helius](https://www.helius.dev/), [QuickNode](https://www.quicknode.com/), and [HelloMoon](https://www.hellomoon.io/).
+
+In this lesson, we're going to set up a Helius RPC.
+
+1. First, go to the [developer login page](https://dashboard.helius.dev).
+
+![image](./assets/courses/basics/helius_1.png)
+
+2. Sign up using any of the options. In this example, we will be signing up using a Solana Wallet.
+
+![image](./assets/courses/basics/helius_2.png)
+
+![image](./assets/courses/basics/helius_3.png)
+
+3. Choose the Free Plan and you're set!
+
+![image](./assets/courses/basics/helius_4.png)
+
+4. To get the API key for your project, go to the Endpoints tab on the left, and switch it to Devnet.
+
+![image](./assets/courses/basics/helius_5.png)
+
+![image](./assets/courses/basics/helius_6.png)
+
+![image](./assets/courses/basics/helius_7.png)
+
+Easy, isn't it? Next, we'll learn how to point our wallet to Solana's Testnet.`]);
+
+    values.push([1, `# Chapter 3: Phantom Testnet
+
+In this chapter, we will set up Phantom's testnet mode.
+
+1. Click the circle at the top right corner, right next to your wallet's name.
+
+![image](./assets/courses/basics/phantom_1.png)
+
+2. Go to settings.
+
+![image](./assets/courses/basics/phantom_2.png)
+
+3. Scroll to the bottom, select Developer Settings.
+
+![image](./assets/courses/basics/phantom_3.png)
+
+4. Click on Testnet Mode and select Solana.
+
+![image](./assets/courses/basics/phantom_4.png)
+
+5. Select Solana Devnet and you're done!
+
+![image](./assets/courses/basics/phantom_5.png)
+
+Next, let's find out how to set it up on Backpack.`]);
+
+    values.push([1, `# Chapter 4: Backpack Testnet
+
+In this chapter, we will set up Backpack's testnet mode.
+
+1. Click the circle at the top right corner, right next to your wallet's name.
+
+![image](./assets/courses/basics/backpack_1.png)
+
+2. Click on Settings.
+
+3. Click on Solana.
+
+![image](./assets/courses/basics/backpack_2.png)
+
+4. Select RPC Connection.
+
+![image](./assets/courses/basics/backpack_3.png)
+
+5. Select Custom.
+
+![image](./assets/courses/basics/backpack_4.png)
+
+6. Paste the devnet RPC url from Helius.
+
+![image](./assets/courses/basics/backpack_5.png)
+
+7. Update and you're done!`]);
+
+    values.push([1, `# Chapter 5: Faucets
+
+We need SOLs to use Solana, even in testnet mode. However, we require testnet SOLs, not real SOLs, to do stuff in Solana's testnet.
+
+To acquire SOLs on testnet (they have no value), you will need to request an airdrop. To do this, you will need to visit a faucet, or request it programatically.
+
+For starters, I'll demonstrate on how to request an airdrop from a faucet.
+
+1. First, go to this [site](https://solfaucet.com/).
+
+![image](./assets/courses/basics/solfaucet_1.png)
+
+2. Paste your wallet address.
+
+![image](./assets/courses/basics/solfaucet_2.png)
+
+3. Airdrop SOLs to Devnet, and you're done!
+
+Easy!`]);
+
+    values.push([1, `# Chapter 6: Explorers
+
+What's the use of a public ledger when you have no idea what's happening right? Luckily for us, there are gigachads who chew glass all day that records all on chain transactions. In Solana, we have [Solscan](https://solscan.io) and [SolanaFM](https://solana.fm) to name a couple.
+
+Using these explorers, users are able to see all on chain transactions and get all the important info of the transactions, such as transaction status, logs, events, and many more. Without these explorers, we are handicapped when trying to figure out the errors in our codes.
+
+Similar to wallets, we will need to point the explorers to testnet if we want to get testnet transactions. Follow these instructions to set up the explorers.
+
+- Solscan
+
+1. Click on the Solana icon on the top right corner and select Solscan RPC - Devnet.
+
+![image](./assets/courses/basics/solscan_1.png)
+
+- Solana FM
+
+1. Turn on Developer Mode using the bar at the bottom.
+
+![image](./assets/courses/basics/solanafm_1.png)
+
+2. Click on the Settings button on the bottom bar.
+
+3. In Preferred RPC, select devnet-solana.
+
+![image](./assets/courses/basics/solanafm_2.png)`]);
+
+    values.push([1, `# Chapter 7: Finalizing
+
+Now that that's done, let's make use of our knowledge and send a transaction in testnet mode.
+
+To make things simple, let's send 0.01 testnet SOLs to this address: BFVoLdTw1hd6Ly9KTAPWYie9NeFcbce5evKFRQqpgxvm
+
+We are using Phantom for this example.
+
+1. Open up Phantom, if you haven't requested for an airdrop, please request from the faucet (Chapter 5).
+
+![image](./assets/courses/basics/send_1.png)
+
+2. Make sure it's in Testnet mode!!!
+
+3. Click on Solana.
+
+![image](./assets/courses/basics/send_2.png)
+
+4. Click on Send.
+
+![image](./assets/courses/basics/send_3.png)
+
+5. Paste the address and follow the steps.
+
+![image](./assets/courses/basics/send_4.png)
+
+6. Once again, make sure it shows that the network is Solana Devnet (Backpack doesn't show this, but it will show that a custom RPC is being used).
+
+![image](./assets/courses/basics/send_5.png)
+
+7. Click on the View Transaction to view the transaction details.
+
+![image](./assets/courses/basics/send_6.png)
+
+Congratulations! You've made it to the end, now let's move on to the next courses shall we?`]);
+
+    let query = getInsertQuery(columns, values, table);
+    try {
+        await DB.executeQuery(query);
+        console.log(`Seeded ${table}`);
+        return true;
+    }
+
+    catch {
+        return false;
+    }
+}
+
+export const seedActions = async() => {
+    // id: number;
+    // lesson_page_id: number;
+    // markdown: string;
+    // type: ActionType; 
+    // code?: string;
+    // options?: string;
+    // tx_verify_url?: string;
+    // cta_url?: string;
+    let table = 'actions';
+    let checkerQuery = `SELECT COUNT(*) as count FROM ${table}`;
+    let checkerRes = await DB.executeQueryForResults<{count: number}>(checkerQuery);
+
+    if(checkerRes && checkerRes[0].count > 0) {
+        console.log(`${table} already seeded! Skipping..`);
+        return;
+    }
+    let columns = ['lesson_page_id', 'markdown', 'type', 'code', 'options', 'tx_verify_url', 'cta_url'];
+    let values: any[][] = [];
+
+    values.push([1, 'How many types of developer networks are there?', 'select', null, '{"options": ["1","2","3"], "answer": 3}', null, null]);
+    values.push([7, 'Enter the tx hash to complete the lesson!', 'tx', null, null, 'http://localhost:3000/course/verifyFirstTestnetTx', null]);
+
+    let query = getInsertQuery(columns, values, table);
+    try {
+        await DB.executeQuery(query);
+        console.log(`Seeded ${table}`);
+        return true;
+    }
+
+    catch {
+        return false;
+    }
+}
