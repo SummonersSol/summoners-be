@@ -3,7 +3,7 @@ import effectFile from '../../assets/effects/_effect_files.json';
 import skillIconsFile from '../../assets/skills/_skill_icon_files.json';
 import DB from '../DB';
 
-import { getInsertQuery, getRandomNumber, getHash } from '../../utils';
+import { getInsertQuery, getRandomNumber, getHash, getBeDomain } from '../../utils';
 import _ from 'lodash';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -795,7 +795,7 @@ export const seedActions = async() => {
     let values: any[][] = [];
 
     values.push([1, 'How many types of developer networks are there?', 'select', null, '{"options": ["1","2","3"], "answer": 2}', null, null]);
-    values.push([7, 'Enter the tx hash to complete the lesson!', 'tx', null, null, 'http://localhost:8081/courses/verifyFirstTestnetTx', null]);
+    values.push([7, 'Enter the tx hash to complete the lesson!', 'tx', null, null, `${getBeDomain()}/courses/verifyFirstTestnetTx`, null]);
 
     let query = getInsertQuery(columns, values, table);
     try {
