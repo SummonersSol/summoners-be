@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as UserController from '../Controllers/UserController';
+import * as PlayerLocationController from '../Controllers/PlayerLocationController';
 import { contentUpload } from './Upload';
 import { checkAllowedMime, verifySignature } from '../../utils';
 import _ from 'lodash';
@@ -118,13 +119,16 @@ routes.post('/me', async(req, res) => {
     if(!user) {
         return res.status(404).send("Unable to find user.");
     }
-
+    let areaId = (await PlayerLocationController.find({ user_id: user.id }))?.[0].area_id ?? 0;
     await UserController.update(user.id, { last_connected_at: moment().format('YYYY-MM-DD HH:mm:ss') });
 
     return res.send({
         success: true,
         message: "Success",
-        data: user
+        data: {
+            ...user,
+            area_id: areaId,
+        }
     });
 });
 

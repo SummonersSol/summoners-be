@@ -6,6 +6,10 @@ export type User = {
     last_connected_at: string;
 }
 
+export type ProcessedUser = {
+    area_id: number;
+}
+
 export const fillableColumns = [
     'id',
     'name',
