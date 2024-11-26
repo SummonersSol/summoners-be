@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getServerPort, isProduction } from '../../utils';
+import { getBeDomain, getServerPort, isProduction } from '../../utils';
 import * as clientio from 'socket.io-client';
 import * as UserController from '../Controllers/UserController';
 import * as CourseController from '../Controllers/CourseController';
@@ -28,7 +28,7 @@ routes.post('/lastPage', async(req, res) => {
 });
 
 routes.post('/verifyFirstTestnetTx', async(req, res) => {
-    let action = await ActionController.find({tx_verify_url: 'http://localhost:8081/courses/verifyFirstTestnetTx'});
+    let action = await ActionController.find({tx_verify_url: `${getBeDomain()}/courses/verifyFirstTestnetTx`});
     if(!action || !action[0]) {
         return res.send(500);
     }
